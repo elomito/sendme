@@ -2,15 +2,7 @@
 
 A cluster-based errand marketplace that helps people request items from outside while enabling others to earn small commissions by fulfilling those errands.
 
----
-
-## 1. Overview
-
-This document outlines the requirements for building a Minimum Viable Product (MVP) of a cluster-based errand system.
-
 The system allows users within a shared environment such as a school, workplace, or residential cluster to request items from outside while enabling others to fulfill those requests in exchange for a small commission.
-
-The goal of the MVP is to validate the core idea with a simple, functional system before introducing advanced features.
 
 ---
 
@@ -39,22 +31,9 @@ SENDME is a web-based platform where:
 
 ---
 
-## 4. MVP Goals
+## 4. User Roles
 
-The MVP aims to:
-
-- Enable users to create and manage requests
-- Allow users to browse and claim tasks
-- Provide a simple task lifecycle
-- Validate whether users are willing to:
-  - Post requests
-  - Fulfill errands for commission
-
----
-
-## 5. User Roles
-
-### 5.1 Requester
+### 4.1 Requester
 
 A requester is a user who needs an item purchased.
 
@@ -67,7 +46,7 @@ A requester is a user who needs an item purchased.
 
 ---
 
-### 5.2 Runner
+### 4.2 Runner
 
 A runner is a user who is going out and wants to fulfill tasks.
 
@@ -80,9 +59,9 @@ A runner is a user who is going out and wants to fulfill tasks.
 
 ---
 
-## 6. Core Features
+## 5. Core Features
 
-### 6.1 User Authentication
+### 5.1 User Authentication
 
 Basic login and registration system.
 
@@ -93,7 +72,7 @@ Basic login and registration system.
 
 ---
 
-### 6.2 Create Request
+### 5.2 Create Request
 
 Users should be able to:
 
@@ -113,7 +92,7 @@ The system automatically adds a commission fee.
 
 ---
 
-### 6.3 Task Feed
+### 5.3 Task Feed
 
 A page displaying all available (unclaimed) tasks.
 
@@ -126,7 +105,7 @@ Each task should display:
 
 ---
 
-### 6.4 Claim Task
+### 5.4 Claim Task
 
 Users can select a task and mark it as **Accepted**.
 
@@ -137,7 +116,7 @@ Once claimed:
 
 ---
 
-### 6.5 Task Status Tracking
+### 5.5 Task Status Tracking
 
 Each task should move through the following states:
 
@@ -149,7 +128,7 @@ Each task should move through the following states:
 
 ---
 
-### 6.6 Mark Task as Delivered
+### 5.6 Mark Task as Delivered
 
 The runner marks the task as completed after delivery.
 
@@ -157,23 +136,9 @@ The task is then closed.
 
 ---
 
-## 7. Out of Scope (For MVP)
+## 6. System Requirements
 
-The following features are intentionally excluded to keep the MVP simple:
-
-- In-app payments
-- Mobile application
-- Notifications (SMS/Push)
-- Ratings and reviews
-- Real-time tracking
-- Location services
-- Task grouping or batching
-
----
-
-## 8. System Requirements
-
-### 8.1 Backend
+### 6.1 Backend
 
 - Firebase
 
@@ -186,7 +151,7 @@ The following features are intentionally excluded to keep the MVP simple:
 
 ---
 
-### 8.2 Database
+### 6.2 Database
 
 - Firebase Firestore
 
@@ -197,7 +162,7 @@ The following features are intentionally excluded to keep the MVP simple:
 
 ---
 
-### 8.3 Frontend
+### 6.3 Frontend
 
 - React
 - Vite
@@ -210,7 +175,7 @@ The following features are intentionally excluded to keep the MVP simple:
 
 ---
 
-## 9. Basic Workflow
+## 7. Basic Workflow
 
 ### Request Flow
 
@@ -231,18 +196,8 @@ The following features are intentionally excluded to keep the MVP simple:
 
 ---
 
-## 10. Success Criteria
 
-The MVP is considered successful if:
-
-- Users can create requests successfully
-- Tasks can be claimed and completed
-- Users actively use the system
-- The commission model attracts runners
-
----
-
-## 11. Future Enhancements
+## 8. Future Enhancements
 
 Potential future improvements include:
 
@@ -256,7 +211,7 @@ Potential future improvements include:
 
 ---
 
-## 12. Conclusion
+## 9. Conclusion
 
 SENDME focuses on validating a simple but impactful idea:
 
@@ -340,7 +295,3 @@ npm run dev
 ```
 
 ---
-
-## License
-
-This project is currently being developed as an MVP for experimentation, learning, and validation purposes.
