@@ -1,0 +1,95 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Users ---
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidUser(incoming())
+                       && incoming().email == existing().email;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['username', 'email', 'createdAt'])
+          && data.keys().size() == 3
+          && data.username is string && data.username.size() >= 2 && data.username.size() <= 50
+          && data.email is string && data.email.size() <= 200
+          && data.createdAt == request.time;
+    }
+
+    // --- Tasks ---
+    match /tasks/{taskId} {
+      // List/Get: Signed in users can see tasks.
+      // Note: We'll enforce filtering in the app for UX, 
+      // but technically anyone can see a task if they have the ID.
+      // Strict rule: only show pending tasks to everyone, 
+      // but accepted/delivered only to parties involved?
+      // For MVP, keep it simple: visible to all signed in users.
+      allow read: if isSignedIn();
+
+      allow create: if isSignedIn() && isValidTask(incoming())
+          && isOwner(incoming().requesterId)
+          && incoming().status == 'pending'
+          && incoming().runnerId == null;
+
+      allow update: if isSignedIn() && (
+        // Action: Claim
+        (isClaimAction() && incoming().diff(existing()).affectedKeys().hasOnly(['runnerId', 'runnerName', 'status', 'updatedAt'])) ||
+        // Action: Deliver
+        (isDeliverAction() && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']))
+      );
+    }
+
+    function isValidTask(data) {
+      return data.keys().hasAll(['itemName', 'basePrice', 'commission', 'totalPrice', 'notes', 'requesterId', 'requesterName', 'runnerId', 'runnerName', 'status', 'createdAt', 'updatedAt'])
+          && data.keys().size() == 12
+          && data.itemName is string && data.itemName.size() > 0 && data.itemName.size() <= 200
+          && data.basePrice is number && data.basePrice >= 0
+          && data.commission is number && data.commission >= 0
+          && data.totalPrice == data.basePrice + data.commission
+          && (data.runnerId == null || isValidId(data.runnerId))
+          && data.status in ['pending', 'accepted', 'delivered']
+          && data.createdAt == (resource == null ? request.time : existing().createdAt)
+          && data.updatedAt == request.time;
+    }
+
+    function isClaimAction() {
+      return existing().status == 'pending'
+          && incoming().status == 'accepted'
+          && incoming().runnerId == request.auth.uid
+          && existing().requesterId != request.auth.uid; // Can't claim own task
+    }
+
+    function isDeliverAction() {
+      return existing().status == 'accepted'
+          && incoming().status == 'delivered'
+          && existing().runnerId == request.auth.uid;
+    }
+  }
+}
