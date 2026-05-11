@@ -1,0 +1,6 @@
+{
+  "name": "SENDME",
+  "description": "A cluster-based errand platform where community members request items and others fulfill them for a commission.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
