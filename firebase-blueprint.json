@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string", "description": "Display name of the user" },
+        "email": { "type": "string", "format": "email", "description": "Email from authentication" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["username", "email", "createdAt"]
+    },
+    "Task": {
+      "title": "Errand Task",
+      "description": "An errand request from a user",
+      "type": "object",
+      "properties": {
+        "itemName": { "type": "string", "description": "Name of the item to be bought" },
+        "basePrice": { "type": "number", "description": "Estimated price of the item" },
+        "commission": { "type": "number", "description": "Runner's incentive" },
+        "totalPrice": { "type": "number", "description": "Total amount to be paid by requester" },
+        "notes": { "type": "string", "description": "Optional instructions" },
+        "requesterId": { "type": "string", "description": "UID of the user who created the request" },
+        "requesterName": { "type": "string", "description": "Username of the requester" },
+        "runnerId": { "type": "string", "description": "UID of the person fulfilling the task", "nullable": true },
+        "runnerName": { "type": "string", "description": "Username of the runner", "nullable": true },
+        "status": { "type": "string", "enum": ["pending", "accepted", "delivered"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["itemName", "basePrice", "commission", "totalPrice", "requesterId", "requesterName", "status", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Individual user profiles"
+    },
+    "tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Errand requests and their lifecycle"
+    }
+  }
+}
